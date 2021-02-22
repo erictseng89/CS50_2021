@@ -535,3 +535,12 @@ git --version
 git init
 git add.
 git add .
+git add -A
+git commit -m "Initial Commit"
+git config --global user.name "Eric Tseng"
+git config --global user.email "erictseng89@gmail.com"
+git commit -m "Initial Commit"
+git remote add origin git@github.com:Chocofudgelicious/CS50_2021.git
+git remote -v
+git push origin master
+git status
