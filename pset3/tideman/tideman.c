@@ -334,10 +334,11 @@ void lock_pairs(void)
 
     // To prevent a cycle, we will use the following system:
     // If a candidate has already a been loser in a previous pair, then the candidate can no longer point to a current source.
-    // Thus there needs to be an int variable to see who is the current source and a boolean array to see who has been a loser.
+    // Thus there needs to be an two boolean arrays to see record who is a source and who has been a loser.
 
     // First source will be the winner in the first pair.
 
+    //initializing the two boolean arrays.
     for (int i = 0; i <candidate_count; i++)
     {
         source[i] = false;
@@ -353,6 +354,7 @@ void lock_pairs(void)
 
         if (loser[c.winner])
         {
+            // If the winner in current pair has been a loser before.
             if (source[c.loser])
             {
                 // If a loser has a win over a source, then do nothing.
@@ -367,7 +369,7 @@ void lock_pairs(void)
         }
         else if (!loser[c.winner])
         {
-            // If a winner has never lost before, then they become a source. If their opponent was once a source, they are no longer a source.
+            // If a winner has never lost before, then they become a source. If their opponent was once a source, then they are no longer a source.
             locked[c.winner][c.loser] = true;
             source[c.winner] = true;
             loser[c.loser] = true;
