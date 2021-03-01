@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
 
 	for (int i = 0; i < H_SIZE; i++)
 	{
-		fread(&header[i], sizeof(BYTE), 1, source);
+		fread(header, sizeof(BYTE), 1, source);
 	}
 	printf("Header is: %s\n", header);
 

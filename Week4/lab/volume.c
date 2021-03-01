@@ -36,16 +36,23 @@ int main(int argc, char *argv[])
 
     // TODO: Copy header from input file to output file
     uint8_t header[HEADER_SIZE];
+    // char c;
     for (int i = 0; i < HEADER_SIZE; i++)
     {
+        // c = fgetc(input);
+        // fputc(c, output);
         fread(&header[i], sizeof(uint8_t), 1, input);
+        fwrite(&header[i], sizeof(uint8_t), 1, output);
     }
 
     // TODO: Read samples from input file and write updated data to output file
-
-
-
-
+    int16_t buffer;
+    // fseek(input, HEADER_SIZE, SEEK_CUR);
+    while(fread(&buffer, sizeof(int16_t), 1, input))
+    {
+        buffer = buffer * factor;
+        fwrite(&buffer, sizeof(int16_t), 1, output);
+    }
     // Close files
     fclose(input);
     fclose(output);
