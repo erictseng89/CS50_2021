@@ -135,6 +135,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     // Sobel Operator Matrix
     int gm[2][3][3] = {{{-1, 0, -1}, {-2, 0, 2}, {-1, 0, 1}}, {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}}};
 
+<<<<<<< HEAD
     /* for (int s = 0; s < 2; s++)
     {
         for (int t = 0; t < 3; t++)
@@ -147,13 +148,31 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
         }
         printf("\n");
     } */
+=======
+    // for (int s = 0; s < 2; s++)
+    // {
+    //     for (int t = 0; t < 3; t++)
+    //     {
+    //         for (int u = 0; u < 3; u++)
+    //         {
+    //             printf("%i ", gm[s][t][u]);
+    //         }
+    //         printf("\n");
+    //     }
+    //     printf("\n");
+    // }
+>>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
     // 0 Value for edges indicating black.
     uint8_t edge = 0;
 
     // Temporary arrays to store the calculated values for each pixel.
     RGBTRIPLE temp[2][height][width];
 
+<<<<<<< HEAD
     // Temporary variables to store values as we add in new numbers, need 3 for each color. Will reset to 0 after each calculation.
+=======
+    // Temporary variables to store calculations, need 3 for each color. Will reset to 0 after each calculation.
+>>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
     // Will use an array, 0 = blue, 1 = green, 2 = red.
     int calc[3] = {0, 0, 0};
 
@@ -169,7 +188,11 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 {
                     calc[reset_calc] = 0;
                 }
+<<<<<<< HEAD
                 float div = 1.0;
+=======
+                int div = 9;
+>>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
 
                 // Create two int values to record the starting location (the top left grid of the 3x3 blur box).
                 int x = 0;
