@@ -12,11 +12,11 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
         for (int j = 0; j < width; j++)
         {
 
-            float av_t = (image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3.0;
+            float av_t = (image[i][j].rgbtRed + image[i][j].rgbtGreen + image[i][j].rgbtBlue) / 3.0;
             uint8_t av = round(av_t);
-            image[i][j].rgbtBlue = av;
-            image[i][j].rgbtGreen = av;
             image[i][j].rgbtRed = av;
+            image[i][j].rgbtGreen = av;
+            image[i][j].rgbtBlue = av;
         }
     }
     return;
@@ -65,9 +65,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             int x, y;
 
             // Create temp variables (must be int as the values may exceed the size of a byte) to use to calculate the values.
-            int blue = 0;
-            int green = 0;
-            int red = 0;
+            int Red = 0;
+            int Green = 0;
+            int Blue = 0;
 
             // Create a variable to count how many boxes are valid (from 4 to 9). Default will be 9, and will minus as we remove boxes.
             float div = 9.0;
@@ -91,22 +91,22 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
                         else
                         {
                             // Add in RGB data for later calculation.
-                            blue = blue + image[x][y].rgbtBlue;
-                            green = green + image[x][y].rgbtGreen;
-                            red = red + image[x][y].rgbtRed;
+                            Red = Red + image[x][y].rgbtRed;
+                            Green = Green + image[x][y].rgbtGreen;
+                            Blue = Blue + image[x][y].rgbtBlue;
                         }
                     }
                 }
             }
             // Now to calculate and put in the new value into the temp array.
 
-            float blue_t = blue / div;
-            float green_t = green / div;
-            float red_t = red / div;
+            float Red_t = Red / div;
+            float Green_t = Green / div;
+            float Blue_t = Blue / div;
 
-            temp[i][j].rgbtBlue = round(blue_t);
-            temp[i][j].rgbtGreen = round(green_t);
-            temp[i][j].rgbtRed = round(red_t);
+            temp[i][j].rgbtRed = round(Red_t);
+            temp[i][j].rgbtGreen = round(Green_t);
+            temp[i][j].rgbtBlue = round(Blue_t);
         }
     }
     // Copy temp data back into original array.
@@ -135,7 +135,6 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     // Sobel Operator Matrix
     int gm[2][3][3] = {{{-1, 0, -1}, {-2, 0, 2}, {-1, 0, 1}}, {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}}};
 
-<<<<<<< HEAD
     /* for (int s = 0; s < 2; s++)
     {
         for (int t = 0; t < 3; t++)
@@ -148,51 +147,45 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
         }
         printf("\n");
     } */
-=======
-    // for (int s = 0; s < 2; s++)
-    // {
-    //     for (int t = 0; t < 3; t++)
-    //     {
-    //         for (int u = 0; u < 3; u++)
-    //         {
-    //             printf("%i ", gm[s][t][u]);
-    //         }
-    //         printf("\n");
-    //     }
-    //     printf("\n");
-    // }
->>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
+
     // 0 Value for edges indicating black.
     uint8_t edge = 0;
 
     // Temporary arrays to store the calculated values for each pixel.
     RGBTRIPLE temp[2][height][width];
 
-<<<<<<< HEAD
-    // Temporary variables to store values as we add in new numbers, need 3 for each color. Will reset to 0 after each calculation.
-=======
+
     // Temporary variables to store calculations, need 3 for each color. Will reset to 0 after each calculation.
->>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
-    // Will use an array, 0 = blue, 1 = green, 2 = red.
+
+    // Will use an array, 0 = Red, 1 = Green, 2 = Blue.
     int calc[3] = {0, 0, 0};
 
     // Loop for Gx and Gy.
     for (int g = 0; g < 2; g++)
     {
+        // DEBUG
+/*         if (g == 1)
+        {
+            printf("Debug.\n");
+        } */
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
             {
+                // DEBUG
+                if (j == 599)
+                {
+                    ;
+                }
+                
                 // Reinitialize calc
                 for (int reset_calc = 0; reset_calc < 3; reset_calc++)
                 {
                     calc[reset_calc] = 0;
                 }
-<<<<<<< HEAD
+
                 float div = 1.0;
-=======
-                int div = 9;
->>>>>>> fd3788895b5bde382129630cc15275f5bcd3b07a
+
 
                 // Create two int values to record the starting location (the top left grid of the 3x3 blur box).
                 int x = 0;
@@ -207,6 +200,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 {
                     for (y = j - 1; y <= j + 1; y++)
                     {
+
                         // If current pixel is edge.
                         if (x < 0 || x >= height || y < 0 || y >= width)
                         {
@@ -219,9 +213,15 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                         // Multiply values with matrix.
                         else
                         {
-                            calc[0] = calc[0] + gm[g][mx][my] * image[x][y].rgbtBlue;
+                            // For debugging purposes.
+                            int check_rgb[3] = {image[x][y].rgbtRed, image[x][y].rgbtGreen, image[x][y].rgbtBlue};
+                            calc[0] = calc[0] + gm[g][mx][my] * check_rgb[0];
+                            calc[1] = calc[1] + gm[g][mx][my] * check_rgb[1];
+                            calc[2] = calc[2] + gm[g][mx][my] * check_rgb[2];
+
+                            /* calc[0] = calc[0] + gm[g][mx][my] * image[x][y].rgbtRed;
                             calc[1] = calc[1] + gm[g][mx][my] * image[x][y].rgbtGreen;
-                            calc[2] = calc[2] + gm[g][mx][my] * image[x][y].rgbtRed;
+                            calc[2] = calc[2] + gm[g][mx][my] * image[x][y].rgbtBlue; */
                             my++;
                         }
                     }
@@ -238,12 +238,17 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                     {
                         calc[k] = 255;
                     }
+                    else if (calc[k] < 0)
+                    {
+                        calc[k] = 0;
+                    }
+                    
                 }
 
                 // Place values into temp RGBTRIPLE array.
-                temp[g][i][j].rgbtBlue = calc[0];
+                temp[g][i][j].rgbtRed = calc[0];
                 temp[g][i][j].rgbtGreen = calc[1];
-                temp[g][i][j].rgbtRed = calc[2];
+                temp[g][i][j].rgbtBlue = calc[2];
             }
         }
     }
@@ -254,13 +259,13 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
         {
             // Create floats to later use for rounding.
             float temp_rgb[3];
-            temp_rgb[0] = sqrt(pow(temp[0][a][b].rgbtBlue, 2) + pow(temp[1][a][b].rgbtBlue, 2));
+            temp_rgb[0] = sqrt(pow(temp[0][a][b].rgbtRed, 2) + pow(temp[1][a][b].rgbtRed, 2));
             temp_rgb[1] = sqrt(pow(temp[0][a][b].rgbtGreen, 2) + pow(temp[1][a][b].rgbtGreen, 2));
-            temp_rgb[2] = sqrt(pow(temp[0][a][b].rgbtRed, 2) + pow(temp[1][a][b].rgbtRed, 2));
+            temp_rgb[2] = sqrt(pow(temp[0][a][b].rgbtBlue, 2) + pow(temp[1][a][b].rgbtBlue, 2));
 
-            image[a][b].rgbtBlue = round(temp_rgb[0]);
+            image[a][b].rgbtRed = round(temp_rgb[0]);
             image[a][b].rgbtGreen = round(temp_rgb[1]);
-            image[a][b].rgbtRed = round(temp_rgb[2]);
+            image[a][b].rgbtBlue = round(temp_rgb[2]);
         }
     }
 
