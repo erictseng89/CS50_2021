@@ -2,6 +2,13 @@
 #include <stdio.h>
 #include <math.h>
 
+typedef struct {
+    float rgbtRed;
+    float rgbtGreen;
+    float rgbtBlue;
+}
+RGBFLOAT;
+
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
 {
@@ -133,7 +140,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     */
 
     // Sobel Operator Matrix
-    int gm[2][3][3] = {{{-1, 0, -1}, {-2, 0, 2}, {-1, 0, 1}}, {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}}};
+    int gm[2][3][3] = {{{-1, 0, 1}, {-2, 0, 2}, {-1, 0, 1}}, {{-1, -2, -1}, {0, 0, 0}, {1, 2, 1}}};
 
     /* for (int s = 0; s < 2; s++)
     {
@@ -149,10 +156,10 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     } */
 
     // 0 Value for edges indicating black.
-    uint8_t edge = 0;
+    // uint8_t edge = 0;
 
     // Temporary arrays to store the calculated values for each pixel.
-    RGBTRIPLE temp[2][height][width];
+    RGBFLOAT temp[2][height][width];
 
 
     // Temporary variables to store calculations, need 3 for each color. Will reset to 0 after each calculation.
@@ -164,27 +171,30 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
     for (int g = 0; g < 2; g++)
     {
         // DEBUG
-/*         if (g == 1)
-        {
-            printf("Debug.\n");
-        } */
+        // if (g == 1)
+        // {
+        //     printf("Debug.\n");
+        // }
         for (int i = 0; i < height; i++)
         {
+            if (g == 1 && i == 1)
+            {
+                ;
+            }
             for (int j = 0; j < width; j++)
             {
                 // DEBUG
-                if (j == 599)
-                {
-                    ;
-                }
-                
+                // if (j == 599)
+                //     ;
+                // }
+
                 // Reinitialize calc
                 for (int reset_calc = 0; reset_calc < 3; reset_calc++)
                 {
                     calc[reset_calc] = 0;
                 }
 
-                float div = 1.0;
+                // float div = 1.0;
 
 
                 // Create two int values to record the starting location (the top left grid of the 3x3 blur box).
@@ -204,10 +214,10 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                         // If current pixel is edge.
                         if (x < 0 || x >= height || y < 0 || y >= width)
                         {
-                            for (int c = 0; c < 3; c++)
-                            {
-                                calc[c] = calc[c] + edge;
-                            }
+                            // for (int c = 0; c < 3; c++)
+                            // {
+                            //     calc[c] = calc[c] + edge;
+                            // }
                             my++;
                         }
                         // Multiply values with matrix.
@@ -230,20 +240,20 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
                 }
 
                 // Divide by divisor, then store to temp array.
-                for (int k = 0; k < 3; k++)
-                {
-                    float calc_t = calc[k] * div;
-                    calc[k] = round(calc_t);
-                    if (calc[k] >= 255)
-                    {
-                        calc[k] = 255;
-                    }
-                    else if (calc[k] < 0)
-                    {
-                        calc[k] = 0;
-                    }
-                    
-                }
+                // for (int k = 0; k < 3; k++)
+                // {
+                //     // float calc_t = calc[k] * div;
+                //     // calc[k] = round(calc_t);
+                //     if (calc[k] >= 255)
+                //     {
+                //         calc[k] = 255;
+                //     }
+                //     else if (calc[k] < 0)
+                //     {
+                //         calc[k] = 0;
+                //     }
+
+                // }
 
                 // Place values into temp RGBTRIPLE array.
                 temp[g][i][j].rgbtRed = calc[0];
@@ -262,6 +272,18 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
             temp_rgb[0] = sqrt(pow(temp[0][a][b].rgbtRed, 2) + pow(temp[1][a][b].rgbtRed, 2));
             temp_rgb[1] = sqrt(pow(temp[0][a][b].rgbtGreen, 2) + pow(temp[1][a][b].rgbtGreen, 2));
             temp_rgb[2] = sqrt(pow(temp[0][a][b].rgbtBlue, 2) + pow(temp[1][a][b].rgbtBlue, 2));
+
+            for (int tem = 0; tem < 3; tem++)
+            {
+                if (temp_rgb[tem] > 255)
+                {
+                    temp_rgb[tem] = 255;
+                }
+                else if (temp_rgb[tem] < 0)
+                {
+                    temp_rgb[tem] = 0;
+                }
+            }
 
             image[a][b].rgbtRed = round(temp_rgb[0]);
             image[a][b].rgbtGreen = round(temp_rgb[1]);
