@@ -1,9 +1,11 @@
 // Implements a dictionary's functionality
-
+#include <ctype.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include "dictionary.h"
 
 // Represents a node in a hash table
@@ -18,15 +20,46 @@ node;
 // Was originally:
 // const unsigned int N = 1;
 // Changed to:
-#define N 26
+#define N 676
 
 // Hash table
 node *table[N];
+
+// Keeps track of dictionary size
+int track_size = 0;
 
 // Returns true if word is in dictionary, else false
 bool check(const char *word)
 {
     // TODO
+    // strcasecmp compares two strings in a case-insensitive manner.
+    // The first node to look at will be the node at table[place]->next.
+
+    // Create a cursor node to use to check each node.
+    node *cursor = malloc(sizeof(node));
+    if (cursor == NULL)
+    {
+        return 1;
+    }
+
+    // Hash the word.
+    int place = hash(word);
+
+    // Point cursor at the first node.
+    cursor = table[place];
+
+    // Loop for looking through the linked list.
+    while (cursor != NULL)
+    {
+        if (strcasecmp(cursor->word, word))
+        {
+            return true;
+        }
+        else
+        {
+            cursor = cursor->next;
+        }
+    }
     return false;
 }
 
@@ -34,7 +67,20 @@ bool check(const char *word)
 unsigned int hash(const char *word)
 {
     // TODO
-    return 0;
+    // 26 * 26 = 676 For the first 2 letters. This will mean that 26 will be 'B' and
+    // First read the first 2 letters, will use tolower function. 'a' is 97 and 'z' is 122.
+    int hash = 0;
+    if (strlen(word) > 1)
+    {
+        int i = tolower(word[0]) - 97;
+        int j = tolower(word[1]) - 97;
+        hash = (i * 26) + j;
+    }
+    else if (strlen(word) == 1)
+    {
+        hash = tolower(word[0]) - 97;
+    }
+    return hash;
 }
 
 // Loads dictionary into memory, returning true if successful, else false
@@ -42,8 +88,8 @@ bool load(const char *dictionary)
 {
     // TODO
     // Open dictionary file
-    FILE *dict = fopen(dictionary, "r");
-    if (dict == NULL)
+    FILE *dicptr = fopen(dictionary, "r");
+    if (dicptr == NULL)
     {
         printf("Cannot open %s\n", dictionary);
         return false;
@@ -55,30 +101,46 @@ bool load(const char *dictionary)
     // Below is an attempt if not using fscanf.
     /* int l = 0;
     char c; */
+    
+    // Initialise table?
+    /* for (int i = 0; i < 676; i++)
+    {
+        table[0] = malloc(sizeof(node));
+    } */
 
     // Doing this with fscanf. Walkthrough 7:30.
-    while (fscanf(dict, "%s", temp))
+    while (fscanf(dicptr, "%s", temp) != EOF)
     {
         // Create a new node, check for NULL.
         node *n = malloc(sizeof(node));
         if (n == NULL)
         {
+            fclose(dicptr);
             return false;
         }
 
         // Copy the word into the new node.
         strcpy(n->word, temp);
 
+        n->next = NULL;
+
         // Find which hash of the hash table the word is at.
         int place = hash(n->word);
 
+        if (place > 25)
+        {
+            ;
+        }
         // Inserting the node at the identified hash.
-        n->next = table[place]->next;
-        table[place]->next = &n;
+        n->next = table[place];
+        table[place] = n;
+
+        // Adding one to track size
+        track_size++;
     }
-   
+
     // Below is an attempt if not using fscanf.
-    /* while (fread(c, sizeof(uint8_t), 1, dict))
+    /* while (fread(c, sizeof(uint8_t), 1, dicptr))
     {
         // Once the buffer becomes 0x0A, it means the word is complete. Will then need to add a \0 (NUL) to end the string. The program will then  create a new node, hash the word and place it in a new node, and then reset the letter counter.
         if (c == 0x0A)
@@ -108,13 +170,13 @@ bool load(const char *dictionary)
         }
         temp[l] = c;
     } */
-    
+
     // Checking end of file.
-    if (feof(dict))
+    if (feof(dicptr))
     {
         return true;
     }
-    
+
     return false;
 }
 
@@ -122,12 +184,42 @@ bool load(const char *dictionary)
 unsigned int size(void)
 {
     // TODO
-    return 0;
+    return track_size;
 }
 
 // Unloads dictionary from memory, returning true if successful, else false
 bool unload(void)
 {
     // TODO
+    // Create two variables to keep track of linked list.
+    node *cursor = malloc(sizeof(node));
+    node *temp = malloc(sizeof(node));
+    if (cursor == NULL || temp == NULL)
+    {
+        return 1;
+    }
+
+    // Loop for entire array
+    for (int i = 0; i < N; i++)
+    {
+        cursor = table[i];
+        temp = table[i];
+
+        // Start checking through the linked list if it exists, and exiting this loop if it has reached the end.
+
+
+        while (cursor != NULL)
+        {
+            temp = cursor;
+            cursor = cursor->next;
+            free(temp);
+        }
+
+        if (i == N - 1)
+        {
+            return true;
+        }
+
+    }
     return false;
 }
