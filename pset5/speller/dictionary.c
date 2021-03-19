@@ -36,11 +36,7 @@ bool check(const char *word)
     // The first node to look at will be the node at table[place]->next.
 
     // Create a cursor node to use to check each node.
-    node *cursor = malloc(sizeof(node));
-    if (cursor == NULL)
-    {
-        return 1;
-    }
+    node *cursor;
 
     // Hash the word.
     int place = hash(word);
@@ -51,7 +47,7 @@ bool check(const char *word)
     // Loop for looking through the linked list.
     while (cursor != NULL)
     {
-        if (strcasecmp(cursor->word, word))
+        if (strcasecmp(cursor->word, word) == 0)
         {
             return true;
         }
@@ -101,7 +97,7 @@ bool load(const char *dictionary)
     // Below is an attempt if not using fscanf.
     /* int l = 0;
     char c; */
-    
+
     // Initialise table?
     /* for (int i = 0; i < 676; i++)
     {
@@ -174,6 +170,7 @@ bool load(const char *dictionary)
     // Checking end of file.
     if (feof(dicptr))
     {
+        fclose(dicptr);
         return true;
     }
 
@@ -192,13 +189,13 @@ bool unload(void)
 {
     // TODO
     // Create two variables to keep track of linked list.
-    node *cursor = malloc(sizeof(node));
-    node *temp = malloc(sizeof(node));
-    if (cursor == NULL || temp == NULL)
+    node *cursor;
+    node *temp;
+    /* if (cursor == NULL || temp == NULL)
     {
         return 1;
     }
-
+ */
     // Loop for entire array
     for (int i = 0; i < N; i++)
     {
@@ -206,7 +203,6 @@ bool unload(void)
         temp = table[i];
 
         // Start checking through the linked list if it exists, and exiting this loop if it has reached the end.
-
 
         while (cursor != NULL)
         {
