@@ -48,11 +48,11 @@ def typecheck(n):
 	# List all possible starts
 	amex = [34, 37]
 	mc = [51, 52, 53, 54, 55]
-	visa = 4
+	visa = "4"
 
 	# Variable for checking start of AMEX and MC
 	head = int(n[0] + n[1])
-	if int(n[0]) == visa:
+	if (n[0]) == visa:
 		print("VISA")
 		return True
 	elif head in amex:
