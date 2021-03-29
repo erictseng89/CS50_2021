@@ -10,25 +10,31 @@ import csv
 def main() :
 
 	# Check command-line arguments. 
-	# Check that 2 arguments were inputted. Using the len() functio to see the size of the argv array. The program will print an error message and exit out with error return if the usage is incorrect.
+	# Check that 2 arguments were inputted. Using the len() function to see the size of the argv array. The program will print an error message and exit out with error return if the usage is incorrect.
 	if len(sys.argv) != 3:
 		print("Usage: dna.py list.csv sequence.txt")
 		return 1
 	
-	# Read the CSV file and read contents into memory. I'm using a list with nested dictionary
+	# Read the CSV file and read contents into memory. I'm using a list with nested dictionary.
 	with open(sys.argv[1], 'r') as csvFile:
 		reader = csv.DictReader(csvFile)
 		strList = []
+
 		for row in reader:
 			strList.append(row)
+	
+	# I need to change the numbers into ints.
 
 	# I need a way to read the STR sequences into memory.
 	# Apparently there is a function to list the keys. It is dict.keys. We need to use the 'list' function to list out the outputs.
 	key_list = list(strList[0].keys())
 
-	# Creating a dictionary to count max repeats of each STR string.
+	# Remove 'name' from list
+	key_list.pop(0)
+
+	# Creating a dictionary to store the calculated max repeat number of each STR string.
 	strCounter = {}
-	for i in range(1, len(key_list), 1):
+	for i in range(len(key_list)):
 		strCounter[key_list[i]] = 0
 	
 	# Opening the sequence file and reading into memory
@@ -36,7 +42,7 @@ def main() :
 		sequence = sequenceFile.read()
 
 	# For all STRs, read through the sequence, starting from start of string towards the end of the string. 
-	for i in range(1, len(key_list), 1):
+	for i in range(len(key_list)):
 		strCurrent = key_list[i]
 
 		""" # Debugging print
@@ -58,7 +64,45 @@ def main() :
 				if newCount > strCounter[strCurrent]:
 					strCounter[strCurrent] = newCount
 
-	print(strCounter)
+	output = ""
+	for person in range(len(strList)):
+		match = False
+		for key in key_list:
+			left = strList[person][key]
+			right = str(strCounter[key])
+
+			if left != right:
+				match = False
+				break
+			else:
+				match = True
+		if match == True:
+			output = strList[person]['name']
+
+	if output == "":
+		print("No match")
+	else:
+		print(output)
+	# for key in key_list:
+	# 	for person in strList:
+	# 		match = False
+
+
+
+
+
+		# if (strList[0][key] == str(strCounter[key])):
+		# 	print("yes")
+		# else:
+		# 	print("no")
+
+		
+	
+
+
+	# print(strList[0]['name'])
+	# print(strCounter)
+	
 
 
 
@@ -76,14 +120,15 @@ def countRepeat(seq, STR):
 	strLength = len(STR)
 	count = 0
 	for check in range(0, len(seq), strLength):
-		tempSeq = seq[check:strLength]
-		print(tempSeq)
+		tempSeq = seq[check:(check+strLength)]
+		# print(tempSeq)
 		if tempSeq == STR:
 			count += 1
-			print(count)
+			# print(count)
 		else:
 			return count
 	return count
 
 
-main()
+if __name__ == "__main__":
+    main()
