@@ -1,0 +1,1 @@
+SELECT AVG(rating) FROM ratings GROUP BY movie_id = (SELECT id FROM movies WHERE year = "2012");

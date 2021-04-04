@@ -1,0 +1,222 @@
+[33mcommit 7b3fc4619761a665c8dce185af9f49efc569f772[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Apr 4 12:14:10 2021 +0800
+
+    ignored movies.db
+
+[33mcommit f2be9547e7e12b01f0e7b2ccfd6df5284851a3da[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Apr 4 12:06:06 2021 +0800
+
+    removed large file imdb show.db
+
+[33mcommit 8d101e78a28243367f73e4d102102dc0abce6508[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Apr 4 12:04:17 2021 +0800
+
+    pset7 movies: attempted, need to check results
+
+[33mcommit d981677ec7d6c632142a351aeb243ffb54d212e5[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sat Apr 3 12:27:40 2021 +0800
+
+    week7 completed lecture
+
+[33mcommit 92bcafa6428a2b4861c43efec6f099c42d73af1c[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sat Apr 3 12:27:27 2021 +0800
+
+    week7 completed lecture
+
+[33mcommit d5691c622ee539f6a8af9236b8f301d574a9d61b[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Thu Apr 1 00:27:18 2021 +0800
+
+    week7: working through lecture
+
+[33mcommit aa4c59d98073269e602b1751f9540bf4adb55c5e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Mar 29 21:55:29 2021 +0800
+
+    pset6 dna: completed but its kinda messy
+
+[33mcommit 813bb9e79a71c879fdde48cb73b6d953853c0a82[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Mar 28 23:29:04 2021 +0800
+
+    pset6 dna: completed read to memory
+
+[33mcommit 2581c55cda46f6662c08d6aaa1e5d40822b10867[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Mar 28 17:01:53 2021 +0800
+
+    week6 lab: completed
+
+[33mcommit e5674a2cb956eb311d9eb96e3f4754cc97be648f[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Mar 28 17:01:11 2021 +0800
+
+    week6 lab: completed
+
+[33mcommit 30eb049635fa5f35927f31a1432f074275bb198e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Tue Mar 23 01:11:26 2021 +0800
+
+    pset6: finished easy 3 sentimental problems
+
+[33mcommit 245205b79bbad443a96b7d63448ee0609b2232d4[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sat Mar 20 16:31:37 2021 +0800
+
+    week6: completed lecture
+
+[33mcommit 9c431d95a7050b448c253f7ded538665cc600029[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Fri Mar 19 21:03:18 2021 +0800
+
+    pset5 speller: Completed
+
+[33mcommit a5db98c28f6eaa0ea7137be3901a9901a58cfa14[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Fri Mar 19 00:16:33 2021 +0800
+
+    Attempted speller
+
+[33mcommit c5d923ae74702336ea77d99b7f285d6fec8f862e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Mar 14 19:06:37 2021 +0800
+
+    pset5 speller: attempted load function
+
+[33mcommit 2cb06b955a736eb7784675b0eb318178b31d6753[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sat Mar 13 17:48:25 2021 +0800
+
+    pset4 recover: completed
+
+[33mcommit a2ba51a8c94e5ae10dbe49ae08eebe4e63ffd10c[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Fri Mar 12 11:43:46 2021 +0800
+
+    pset4 recover: added a bit
+
+[33mcommit 3b7c55e5cec76ab9b267c021d14b8cfaf615ff90[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Wed Mar 10 22:59:14 2021 +0800
+
+    pset4 filter: passed filter/more
+
+[33mcommit 382d487a1336bce26269ba72649c32426da530a2[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Mar 8 00:10:54 2021 +0800
+
+    Moved folders around
+
+[33mcommit 23cb28f9a947956da3a394e7d11bba7342d69450[m
+Merge: 4fb56b7 fd37888
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Fri Mar 5 08:15:08 2021 +0800
+
+    Merge branch 'main' of github.com:Chocofudgelicious/CS50_2021
+
+[33mcommit 4fb56b7c5426943f5109b70f3c2df8e538c3816e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Fri Mar 5 08:12:03 2021 +0800
+
+    pset4 filter: completed easy half
+
+[33mcommit fd3788895b5bde382129630cc15275f5bcd3b07a[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Thu Mar 4 12:41:52 2021 +0800
+
+    pset4 filter: after blur/greyscale
+
+[33mcommit fd8d837af184ac0430cecfdca1ed3600700aa454[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Wed Mar 3 14:45:40 2021 +0800
+
+    pset4 filter: attempted image, can't make bitmap in Ai
+
+[33mcommit 7a38d78654d1e1eea310f7dd983c6fc32d1521a2[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Tue Mar 2 15:21:08 2021 +0800
+
+    pset4 filter: Attempted edge detection, not working
+
+[33mcommit 62f330cd5de5a25431ae126d2d6ea5164ad90f34[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Tue Mar 2 10:21:30 2021 +0800
+
+    pset4 filter: Attempted blur function
+
+[33mcommit f9c8d4fc170a159c48fce3d43fa2caf21b290f74[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Tue Mar 2 01:44:07 2021 +0800
+
+    pset4 filter: completed easy half
+
+[33mcommit ce94ea89ba087b19ba0fa7357e3e73db13226791[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Mar 1 18:35:02 2021 +0800
+
+    Lab4-Volume completed
+
+[33mcommit 731d7d07e1010b3562fc4a6a1e75a6e447feffee[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Mar 1 17:22:17 2021 +0800
+
+    Week4 lecture completed
+
+[33mcommit d940a3b39ee199de5371966856517c82d0a6fd2b[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Feb 28 21:36:19 2021 +0800
+
+    Added .gitignore
+
+[33mcommit a66287a136279353ddeb4b551ca37d2d0118f68e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Feb 28 21:29:28 2021 +0800
+
+    Week4 lecture
+
+[33mcommit ba0c7c4b9a866de905ca466d158accc78ba5d02e[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Sun Feb 28 12:40:17 2021 +0800
+
+    pset3 tideman stuck at lock pairs
+
+[33mcommit 14830d00458fd14641647cc83311b75a603b3314[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Thu Feb 25 20:07:16 2021 +0800
+
+    pset3 submitted runoff
+
+[33mcommit 1c40e650f1a49173d207b849025fa5116ae4e0e1[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Thu Feb 25 07:37:44 2021 +0800
+
+    pset3 runoff added in vote function
+
+[33mcommit c4af2c80dfd5f04cf3f0c6bc1665f63227e93fdf[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Wed Feb 24 07:36:15 2021 +0800
+
+    Week3 added lab and collatz function
+
+[33mcommit 732a403b8286c158c5e8e7ac644a86154063eafb[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Feb 22 21:13:29 2021 +0800
+
+    Removed additional folders and files from CS50 ide
+
+[33mcommit b504c2926e26bb528ebd0f4bdf1f553f2f133ef1[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Feb 22 12:16:05 2021 +0000
+
+    Edited global username/email
+
+[33mcommit 96a4c4499214b8db7ebbe15cef2c57948979ff51[m
+Author: Eric Tseng <erictseng89@gmail.com>
+Date:   Mon Feb 22 12:14:12 2021 +0000
+
+    Initial Commit
