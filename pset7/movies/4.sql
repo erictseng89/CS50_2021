@@ -1,1 +1,1 @@
-SELECT COUNT(votes) FROM ratings WHERE votes = "10.0";
+SELECT COUNT(votes) FROM ratings WHERE rating = "10.0";
