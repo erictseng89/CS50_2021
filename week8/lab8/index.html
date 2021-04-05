@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="styles.css" rel="stylesheet">
+        <title>Trivia!</title>
+
+        <script>
+
+            // TODO: Add code to check answers to questions
+            function loadFunctions() {
+                console.log("loaded");
+                document.querySelectorAll(".q1Button").forEach(element => element.addEventListener('click', q1));
+                document.querySelector('#q2Submit').addEventListener('click', q2);
+            }
+
+            function q1() {
+                console.log("clicked");
+                let answer = event.target;
+                console.log(answer.innerHTML)
+                if (answer.innerHTML == "Javascript") {
+                    answer.style.backgroundColor = "Green";
+                    document.querySelector("#q1p").innerHTML = "Correct!";
+                }
+                else if (answer.innerHTML != "Javascript") {
+                    answer.style.backgroundColor = "Red";
+                    document.querySelector("#q1p").innerHTML = "Incorrect";
+                }
+            }
+
+            function q2() {
+                let answer = document.querySelector('#q2text').value;
+                let correct = "HyperText Markup Language";
+                if (answer == correct) {
+                    console.log("correct");
+                    document.querySelector("#q2text").style.backgroundColor = "Green";
+                    document.querySelector("#q2p").innerHTML = "Correct!";
+                }
+                else if (answer != correct) {
+                    console.log("incorrect");
+                    document.querySelector("#q2text").style.backgroundColor = "Red";
+                    document.querySelector("#q2p").innerHTML = "Incorrect";
+                }
+            }
+            document.addEventListener('DOMContentLoaded', loadFunctions);
+        </script>
+
+    </head>
+    <body>
+
+        <div class="jumbotron">
+            <h1>Trivia!</h1>
+        </div>
+
+        <div class="container">
+
+            <div class="section">
+                <h2>Part 1: Multiple Choice </h2>
+                <hr>
+                <!-- TODO: Add multiple choice question here -->
+                <h3>Which programming language is interpreted by modern day web browsers?</h3>
+                <button class="q1Button">C</button>
+                <button class="q1Button">Python</button>
+                <button class="q1Button">Javascript</button>
+                <p id="q1p"></p>
+            </div>
+
+            <div class="section">
+                <h2>Part 2: Free Response</h2>
+                <hr>
+                <h3>What does HTML stand for?</h3>
+                <!-- TODO: Add free response question here -->
+                <form>
+                    <input id="q2text" type="text">
+                    <input id="q2Submit" value="Check Answer">
+                </form>
+                <p id="q2p"></p>
+                
+
+            </div>
+
+        </div>
+    </body>
+</html>
