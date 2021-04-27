@@ -44,7 +44,7 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    portfolio = db.execute("SELECT * FROM owned WHERE user_id = ?", session["user_id"])
+    portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
     for row in portfolio:
         price = lookup(row["symbol"])["price"]
         row["price"] = price
@@ -87,10 +87,10 @@ def buy():
             owned = db.execute("SELECT * FROM owned WHERE user_id = ? AND symbol = ?", user_id, quote["symbol"])
             if owned:
                 update_shares = owned[0]["shares"] + shares
-                db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?", update_shares, user_id, quote["symbols"])
+                db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?", update_shares, user_id, quote["symbols"].upper())
             elif not owned:
-                db.execute("INSERT INTO owned(user_id, symbol, name, shares) Values(?, ?, ?, ?)", user_id, quote["symbol"], quote["name"], shares)
-            portfolio = db.execute("SELECT * FROM owned WHERE user_id = ?", session["user_id"])
+                db.execute("INSERT INTO owned(user_id, symbol, name, shares) Values(?, ?, ?, ?)", user_id, quote["symbol"].upper(), quote["name"], shares)
+            portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
             for row in portfolio:
                 price = lookup(row["symbol"])["price"]
                 row["price"] = price
@@ -186,18 +186,40 @@ def register():
         
         hashedPassword = generate_password_hash(request.form.get("password"))
         db.execute('INSERT INTO users ("username", "hash") VALUES(?, ?)', request.form.get("username"), hashedPassword)
-
-        
-
-
-    return apology("TODO")
+        portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0" , session["user_id"])
+        for row in portfolio:
+            price = lookup(row["symbol"])["price"]
+            row["price"] = price
+        return render_template("index.html", portfolio = portfolio)
 
 
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
     """Sell shares of stock"""
-    return apology("TODO")
+    if request.method == "GET":
+        portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
+        for row in portfolio:
+            price = lookup(row["symbol"])["price"]
+            row["price"] = price
+        return render_template("sell.html", portfolio = portfolio)
+    else:
+        symbol = request.form.get("share_selected")
+        shares = float(request.form.get("shares"))
+
+        if not symbol:
+            return apology("must select shares", 400)
+        elif not shares:
+            return apology("must input number of shares", 400)
+        elif shares < 0.0:
+            return apology("number of shares must be above 0", 400)
+
+        owned_shares = db.execute("SELECT shares FROM owned WHERE user_id = ? AND symbol = ?", user_id, symbol)
+        if owned_shares < shares:
+            return apology("not enough shares", 400)
+        # else owned_shares >= shares:
+
+        return apology("Error", 400)
 
 
 def errorhandler(e):
