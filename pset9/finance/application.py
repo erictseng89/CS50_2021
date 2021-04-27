@@ -114,12 +114,39 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method = "GET":
+        return render_template("quote.html")
+    else:
+        price = lookup(request.form.get("symbol").lower())
+        return apology("TODO")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
+
+    if request.method == "GET":
+        return render_template("register.html")
+    else:
+        # Check for invalid inputs.
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        elif db.execute("SELECT username FROM users WHERE username = ?", request.form.get("username")):
+            return apology("that username has already been taken", 403)
+        
+        elif not request.form.get("password") or not request.form.get("password_repeated"):
+            return apology("must input password correctly", 403)
+
+        elif request.form.get("password") != request.form.get("password_repeated"):
+            return apology("passwords do not match", 403)
+        
+        hashedPassword = generate_password_hash(request.form.get("password"))
+        db.execute('INSERT INTO users ("username", "hash") VALUES(?, ?)', request.form.get("username"), hashedPassword)
+
+        
+
+
     return apology("TODO")
 
 
