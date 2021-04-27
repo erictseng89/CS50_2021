@@ -39,16 +39,24 @@ db = SQL("sqlite:///finance.db")
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
+def view_portfolio(user_id):
+    user_id = session["user_id"]
+    portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? AND shares > 0 ORDER BY symbol ASC" , user_id)
+    shares_value = 0
+    for row in portfolio:
+        price = lookup(row["symbol"])["price"]
+        row["price"] = price
+        shares_value += price * row["shares"]
+    cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)[0]["cash"]
+    
+    return render_template("index.html", portfolio = portfolio, cash = cash, shares_value = shares_value)    
+
 
 @app.route("/", methods=["GET"])
 @login_required
 def index():
     """Show portfolio of stocks"""
-    portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
-    for row in portfolio:
-        price = lookup(row["symbol"])["price"]
-        row["price"] = price
-    return render_template("index.html", portfolio = portfolio)
+    return view_portfolio(session["user_id"])
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -83,25 +91,24 @@ def buy():
             # Update database
             cash_left = cash - total
             db.execute("UPDATE users SET cash = ? WHERE id = ?", cash_left, user_id)
-            db.execute("INSERT INTO buy(user_id, symbol, name, price, shares) VALUES(?, ?, ?, ?, ?)", user_id, quote["symbol"], quote["name"], quote["price"], shares)
+            db.execute("INSERT INTO transactions(user_id, symbol, name, price, shares) VALUES(?, ?, ?, ?, ?)", user_id, quote["symbol"], quote["name"], quote["price"], shares)
             owned = db.execute("SELECT * FROM owned WHERE user_id = ? AND symbol = ?", user_id, quote["symbol"])
             if owned:
-                update_shares = owned[0]["shares"] + shares
-                db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?", update_shares, user_id, quote["symbols"].upper())
+                # update_shares = owned[0]["shares"] + shares
+                db.execute("UPDATE owned SET shares = shares + ? WHERE user_id = ? AND symbol = ?", shares, user_id, quote["symbol"].upper())
             elif not owned:
                 db.execute("INSERT INTO owned(user_id, symbol, name, shares) Values(?, ?, ?, ?)", user_id, quote["symbol"].upper(), quote["name"], shares)
-            portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
-            for row in portfolio:
-                price = lookup(row["symbol"])["price"]
-                row["price"] = price
-            return render_template("index.html", portfolio = portfolio)
+
+            return view_portfolio(session["user_id"])
 
 
 @app.route("/history")
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+
+    history = db.execute("SELECT time, symbol, price, shares FROM transactions WHERE user_id = ?", session["user_id"])
+    return render_template("history.html", history = history)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -186,11 +193,8 @@ def register():
         
         hashedPassword = generate_password_hash(request.form.get("password"))
         db.execute('INSERT INTO users ("username", "hash") VALUES(?, ?)', request.form.get("username"), hashedPassword)
-        portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0" , session["user_id"])
-        for row in portfolio:
-            price = lookup(row["symbol"])["price"]
-            row["price"] = price
-        return render_template("index.html", portfolio = portfolio)
+        
+        return view_portfolio(session["user_id"])
 
 
 @app.route("/sell", methods=["GET", "POST"])
@@ -198,7 +202,7 @@ def register():
 def sell():
     """Sell shares of stock"""
     if request.method == "GET":
-        portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? WHERE shares > 0", session["user_id"])
+        portfolio = db.execute("SELECT * FROM owned WHERE user_id = ? AND shares > 0", session["user_id"])
         for row in portfolio:
             price = lookup(row["symbol"])["price"]
             row["price"] = price
@@ -214,12 +218,24 @@ def sell():
         elif shares < 0.0:
             return apology("number of shares must be above 0", 400)
 
-        owned_shares = db.execute("SELECT shares FROM owned WHERE user_id = ? AND symbol = ?", user_id, symbol)
-        if owned_shares < shares:
-            return apology("not enough shares", 400)
-        # else owned_shares >= shares:
 
-        return apology("Error", 400)
+        owned_shares = db.execute("SELECT shares FROM owned WHERE user_id = ? AND symbol = ?", session["user_id"], symbol)[0]["shares"]
+        if not owned_shares:
+            return apology("select correct stock", 400)
+        elif owned_shares < shares:
+            return apology("not enough shares", 400)
+        elif owned_shares >= shares:
+            quote = lookup(symbol)
+            # Update sell table
+            db.execute('INSERT INTO transactions(user_id, symbol, name, price, shares) Values(?, ?, ?, ?, ?)', session["user_id"], symbol, quote["name"], quote["price"], shares)
+
+            # update owned table
+            db.execute('UPDATE owned SET shares = shares - ? WHERE user_id = ? AND symbol = ?', shares, session["user_id"], symbol)
+
+            # update cash
+            db.execute('UPDATE users SET cash = cash + ? WHERE id = ?', quote["price"] * shares, session["user_id"])
+
+        return view_portfolio(session["user_id"])
 
 
 def errorhandler(e):

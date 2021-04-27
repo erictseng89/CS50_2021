@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block main %}
-    <table>
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Symbol</th>
@@ -15,21 +15,27 @@
                 <th>TOTAL</th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <td colspan="4"></td>
+                <td>{{ "$%.2f" | format(shares_value + cash | float) }}</td>
+            </tr>
+        </tfoot>
         <tbody>
             {% for row in portfolio %}
             <tr>
-                <th>{{ row["symbol"] }}</th>
-                <th>{{ row["name"] }}</th>
-                <th>{{ row["shares"] }}</th>
-                <th>{{ "$%.2f" | format(row["price"] | float) }}</th>
-                <th>{{ "$%.2f" | format(row["shares"] * row["price"] | float) }}</th>
+                <td>{{ row["symbol"] }}</td>
+                <td>{{ row["name"] }}</td>
+                <td>{{ row["shares"] }}</td>
+                <td>{{ "$%.2f" | format(row["price"] | float) }}</td>
+                <td>{{ "$%.2f" | format(row["shares"] * row["price"] | float) }}</td>
             </tr>
             {% endfor %}
-        </tbody>
-        <!-- <tfoot>
             <tr>
-                <
+                <td>CASH</td>
+                <td colspan="3"></td>
+                <td>{{ "$%.2f" | format(cash | float) }}</td>
             </tr>
-        </tfoot> -->
+        </tbody>
     </table>
 {% endblock %}
