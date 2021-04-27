@@ -15,7 +15,6 @@ app = Flask(__name__)
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-
 # Ensure responses aren't cached
 @app.after_request
 def after_request(response):
@@ -23,7 +22,6 @@ def after_request(response):
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
     return response
-
 
 # Custom filter
 app.jinja_env.filters["usd"] = usd
@@ -42,18 +40,61 @@ if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 @login_required
 def index():
     """Show portfolio of stocks"""
-    return apology("TODO")
+    portfolio = db.execute("SELECT * FROM owned WHERE user_id = ?", session["user_id"])
+    for row in portfolio:
+        price = lookup(row["symbol"])["price"]
+        row["price"] = price
+    return render_template("index.html", portfolio = portfolio)
 
 
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "GET":
+        return render_template("buy.html")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares = int(request.form.get("shares"))
+        # First check for correct input.
+        if not symbol:
+            return apology("must input symbol", 400)
+        elif not shares:
+            return apology("must input number of shares", 400)
+        elif shares < 0:
+            return apology("must be greater than 0", 400)
+
+        # Check for correct symbol
+        quote = lookup(symbol.lower())
+        if quote == None:
+            return apology("must input correct symbol")
+        
+        # Check enough cash
+        total = quote["price"] * shares
+        user_id = session["user_id"]
+        cash = db.execute("SELECT cash FROM users WHERE id = ?", user_id)[0]["cash"]
+        if total > cash:
+            return apology("cant afford", 400)
+        else:
+            # Update database
+            cash_left = cash - total
+            db.execute("UPDATE users SET cash = ? WHERE id = ?", cash_left, user_id)
+            db.execute("INSERT INTO buy(user_id, symbol, name, price, shares) VALUES(?, ?, ?, ?, ?)", user_id, quote["symbol"], quote["name"], quote["price"], shares)
+            owned = db.execute("SELECT * FROM owned WHERE user_id = ? AND symbol = ?", user_id, quote["symbol"])
+            if owned:
+                update_shares = owned[0]["shares"] + shares
+                db.execute("UPDATE owned SET shares = ? WHERE user_id = ? AND symbol = ?", update_shares, user_id, quote["symbols"])
+            elif not owned:
+                db.execute("INSERT INTO owned(user_id, symbol, name, shares) Values(?, ?, ?, ?)", user_id, quote["symbol"], quote["name"], shares)
+            portfolio = db.execute("SELECT * FROM owned WHERE user_id = ?", session["user_id"])
+            for row in portfolio:
+                price = lookup(row["symbol"])["price"]
+                row["price"] = price
+            return render_template("index.html", portfolio = portfolio)
 
 
 @app.route("/history")
@@ -114,11 +155,13 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    if request.method = "GET":
+    if request.method == "GET":
         return render_template("quote.html")
     else:
-        price = lookup(request.form.get("symbol").lower())
-        return apology("TODO")
+        symbol = request.form.get("symbol").lower()
+        symbol_quote = lookup(symbol)
+        price_quote = f'A share of {symbol_quote["name"]} ({symbol_quote["symbol"]}) costs ${symbol_quote["price"]}'
+        return render_template("message.html", message = price_quote)
 
 
 @app.route("/register", methods=["GET", "POST"])

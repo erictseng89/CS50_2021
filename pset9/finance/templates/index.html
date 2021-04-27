@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Portfolio
+{% endblock %}
+
+{% block main %}
+    <table>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in portfolio %}
+            <tr>
+                <th>{{ row["symbol"] }}</th>
+                <th>{{ row["name"] }}</th>
+                <th>{{ row["shares"] }}</th>
+                <th>{{ "$%.2f" | format(row["price"] | float) }}</th>
+                <th>{{ "$%.2f" | format(row["shares"] * row["price"] | float) }}</th>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <!-- <tfoot>
+            <tr>
+                <
+            </tr>
+        </tfoot> -->
+    </table>
+{% endblock %}
